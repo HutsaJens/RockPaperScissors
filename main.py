@@ -1,42 +1,38 @@
 import random
 
 choices = ["rock", "paper", "scissors"]
+winCount = 0
+lossCount = 0   
 
-
-def main():
+def play_round():
+    global winCount, lossCount
     loop = True
-    winCount = 0
-    lossCount = 0   
 
     while(loop):
         userInput = input("Your choice: ").lower()
+
         if userInput == "quit":
-            winRate = round(winCount/ (lossCount + winCount) * 100, 1)
-            print(f"Goodbye, you won {winCount} times and lost {lossCount} times, this gives you a winrate of {winRate} percent")
-            break
-        try:
-            if userInput not in choices:
-                raise TypeError("Choice is not valid")
-            
-            aiChoice = random.choice(choices)
-            print(f"Computer chooses: {aiChoice}")
+            return
+        
+        elif userInput not in choices:
+            print("Invalid choice. Please enter one of the following choices: rock, paper, or scissors.")
+            continue
 
-            winner = getWinner(userInput, aiChoice)
-            if winner == 1:
-                winCount+=1
-                print("You Won!")
-            elif winner == 0:
-                lossCount+=1
-                print("You Lost")
-            else:
-                print(winner)
+        aiChoice = random.choice(choices)
+        print(f"Computer chooses: {aiChoice}")
 
-        except(TypeError):
-            print("Choice is not valid")
-        except Exception as e:
-            print(f"Error: {e}")
+        outCome = getOutCome(userInput, aiChoice)
+        if outCome == 1:
+            winCount+=1
+            print("You Won!")
+        elif outCome == 0:
+            lossCount+=1
+            print("You Lost")
+        else:
+            print(outCome)
 
-def getWinner(userChoice, aiChoice):
+
+def getOutCome(userChoice, aiChoice):
     if userChoice == aiChoice:
         return "Draw"
     elif userChoice == "rock" and aiChoice == "scissors":
@@ -58,4 +54,9 @@ def getWinner(userChoice, aiChoice):
 if __name__ == "__main__":
     print("Welcome to Rock Paper Scissors!")
     print("To start type out your choise, to quit type 'quit'")
-    main()
+
+    play_round()
+
+    winRate = round(winCount/ (lossCount + winCount) * 100, 1)
+    print(f"Goodbye, you won {winCount} times and lost {lossCount} times, this gives you a winrate of {winRate} percent")
+
