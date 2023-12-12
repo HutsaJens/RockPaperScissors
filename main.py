@@ -1,4 +1,5 @@
 import random
+import PySimpleGUI as sg
 
 choices = ["rock", "paper", "scissors"]
 winCount = 0
@@ -8,7 +9,7 @@ def play_round():
     global winCount, lossCount
     loop = True
 
-    while(loop):
+    while loop:
         userInput = input("Your choice: ").lower()
 
         if userInput == "quit":
@@ -50,12 +51,40 @@ def getOutCome(userChoice, aiChoice):
     else:
         return "Unknown"
 
+def render_gui(fun_window):
+
+
+    # Create an event loop
+    while True:
+        event, values = fun_window.read()
+        # End program if user closes window or
+        # presses the OK button
+        if event == "Quit" or event == sg.WIN_CLOSED:
+            break
+
+    fun_window.close()
+
+def setup_gui():
+    sg.theme('DarkAmber')  # Add a touch of color
+    layout_column = [
+                [sg.Text("Your choice: ", justification='center', size=(100,1))],
+                [sg.Button("Rock" , size=(10,1)), sg.Button("Paper", size=(10,1)), sg.Button("Scissors",  size=(10,1))],
+                [sg.Button("Quit", size=(10,1))]
+             ]
+    layout = [[sg.Column(layout_column, element_justification='center')]]
+
+    sgWindow = sg.Window("Rock, Paper, Scissors", layout, size=(500, 500), margins=(5, 5), resizable=True, finalize=True, grab_anywhere=True)
+    return sgWindow
 
 if __name__ == "__main__":
     print("Welcome to Rock Paper Scissors!")
     print("To start type out your choise, to quit type 'quit'")
 
+    window = setup_gui()
+    render_gui(window)
+
     play_round()
+
 
     winRate = round(winCount/ (lossCount + winCount) * 100, 1)
     print(f"Goodbye, you won {winCount} times and lost {lossCount} times, this gives you a winrate of {winRate} percent")
